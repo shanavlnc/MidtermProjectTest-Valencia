@@ -10,11 +10,11 @@ const JobCard = ({ job, onSave, onApply }: JobCardProps) => {
 
   return (
     <View style={styles.jobCard}>
-      <Text style={styles.jobTitle}>{job.title}</Text>
-      <Text style={styles.jobSubtitle}>{job.company}</Text>
-      <Text style={styles.jobDetail}>💰 {job.salary}</Text>
-      <Text style={styles.jobDetail}>📍 {job.location}</Text>
-      <Text style={styles.jobDetail}>📝 {job.type}</Text>
+      <Text style={styles.jobTitle}>{job.jobTitle}</Text>
+      <Text style={styles.jobSubtitle}>{job.companyName}</Text>
+      <Text style={styles.jobDetail}>💰 {job.salaryRange}</Text>
+      <Text style={styles.jobDetail}>📍 {job.jobLocation}</Text>
+      <Text style={styles.jobDetail}>📝 {job.employmentType}</Text>
       <View style={componentStyles.buttonContainer}>
         <TouchableOpacity style={[styles.button, componentStyles.saveButton]} onPress={onSave}>
           <Text style={styles.buttonText}>Save Job</Text>

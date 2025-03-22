@@ -8,7 +8,6 @@ import { globalStyles } from '../styles/globalStyles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Job, RootStackParamList } from '../types/types';
 
-// Define the props for JobFinderScreen
 type JobFinderScreenProps = NativeStackScreenProps<RootStackParamList, 'JobFinder'>;
 
 const JobFinderScreen = ({ navigation }: JobFinderScreenProps) => {
@@ -26,12 +25,19 @@ const JobFinderScreen = ({ navigation }: JobFinderScreenProps) => {
   const fetchJobs = async () => {
     try {
       const response = await axios.get('https://empllo.com/api/v1');
-      const jobsWithIds = response.data.map((job: Job) => ({ ...job, id: uuidv4() }));
-      setJobs(jobsWithIds);
-      setError('');
+      console.log('API Response:', response.data); // Log the response for debugging
+
+      // Add unique IDs to each job
+      const jobsWithIds = response.data.map((job: Job) => ({
+        ...job,
+        id: uuidv4(), // Add a unique ID
+      }));
+
+      setJobs(jobsWithIds); // Update the jobs state
+      setError(''); // Clear any previous errors
     } catch (error) {
       console.error('Error fetching jobs:', error);
-      setError('Failed to fetch jobs. Please try again later.');
+      setError('Failed to fetch jobs. Please try again later.'); // Show error message
     }
   };
 
@@ -42,7 +48,7 @@ const JobFinderScreen = ({ navigation }: JobFinderScreenProps) => {
   };
 
   const filteredJobs = jobs.filter(job =>
-    job.title.toLowerCase().includes(searchQuery.toLowerCase())
+    job.jobTitle.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
