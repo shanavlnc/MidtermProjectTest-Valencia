@@ -1,16 +1,16 @@
+export type Job = {
+  id: string;
+  title: string;
+  company: string;
+  salary: string;
+  location: string;
+  type: string;
+};
+
 export type RootStackParamList = {
   JobFinder: undefined;
   SavedJobs: { savedJobs: Job[] };
   ApplicationForm: { job: Job };
-};
-
-export type Job = {
-  id: string; // We'll add this manually
-  jobTitle: string;
-  companyName: string;
-  salaryRange: string;
-  jobLocation: string;
-  employmentType: string;
 };
 
 export type Theme = 'light' | 'dark';

@@ -16,6 +16,7 @@ const ApplicationForm = ({ navigation, route }: ApplicationFormProps) => {
   const [contact, setContact] = useState('');
   const [reason, setReason] = useState('');
 
+  // Handle form submission
   const handleSubmit = () => {
     if (!name || !email || !contact || !reason) {
       Alert.alert('Error', 'Please fill all fields');

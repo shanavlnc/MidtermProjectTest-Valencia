@@ -14,6 +14,7 @@ const SavedJobsScreen = ({ navigation, route }: SavedJobsScreenProps) => {
   const styles = globalStyles(theme);
   const [savedJobs, setSavedJobs] = useState<Job[]>(route.params?.savedJobs || []);
 
+  // Remove a job from the saved jobs list
   const removeJob = (id: string) => {
     setSavedJobs(savedJobs.filter(job => job.id !== id));
   };

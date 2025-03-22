@@ -8,6 +8,7 @@ import { globalStyles } from '../styles/globalStyles';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Job, RootStackParamList } from '../types/types';
 
+// Define the props for JobFinderScreen
 type JobFinderScreenProps = NativeStackScreenProps<RootStackParamList, 'JobFinder'>;
 
 const JobFinderScreen = ({ navigation }: JobFinderScreenProps) => {
@@ -18,46 +19,47 @@ const JobFinderScreen = ({ navigation }: JobFinderScreenProps) => {
   const [savedJobs, setSavedJobs] = useState<Job[]>([]);
   const [error, setError] = useState('');
 
+  // Fetch jobs from the JSON file
+  const fetchJobs = async () => {
+    try {
+      const response = await axios.get('./data/response.json'); // Path to the JSON file
+      console.log('API Response:', response.data); // Log the response
+      const jobsWithIds = response.data.map((job: Job) => ({ ...job, id: uuidv4() }));
+      setJobs(jobsWithIds);
+      setError('');
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+      setError('Failed to fetch jobs. Please try again later.');
+    }
+  };
+
+  // Fetch jobs when the component mounts
   useEffect(() => {
     fetchJobs();
   }, []);
 
-  const fetchJobs = async () => {
-    try {
-      const response = await axios.get('https://empllo.com/api/v1');
-      console.log('API Response:', response.data); // Log the response for debugging
-
-      // Add unique IDs to each job
-      const jobsWithIds = response.data.map((job: Job) => ({
-        ...job,
-        id: uuidv4(), // Add a unique ID
-      }));
-
-      setJobs(jobsWithIds); // Update the jobs state
-      setError(''); // Clear any previous errors
-    } catch (error) {
-      console.error('Error fetching jobs:', error);
-      setError('Failed to fetch jobs. Please try again later.'); // Show error message
-    }
-  };
-
+  // Save a job to the saved jobs list
   const saveJob = (job: Job) => {
     if (!savedJobs.some(savedJob => savedJob.id === job.id)) {
       setSavedJobs([...savedJobs, job]);
     }
   };
 
+  // Filter jobs based on the search query
   const filteredJobs = jobs.filter(job =>
-    job.jobTitle.toLowerCase().includes(searchQuery.toLowerCase())
+    job.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <View style={styles.container}>
+      {/* Toggle dark/light mode button */}
       <TouchableOpacity style={styles.button} onPress={toggleTheme}>
         <Text style={styles.buttonText}>
           Toggle {theme === 'light' ? 'Dark' : 'Light'} Mode
         </Text>
       </TouchableOpacity>
+
+      {/* Search bar */}
       <TextInput
         style={styles.searchBar}
         placeholder="Search for job title..."
@@ -65,6 +67,8 @@ const JobFinderScreen = ({ navigation }: JobFinderScreenProps) => {
         onChangeText={setSearchQuery}
         placeholderTextColor={theme === 'light' ? '#666666' : '#bdc3c7'}
       />
+
+      {/* Display error message or job list */}
       {error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : (
@@ -80,6 +84,8 @@ const JobFinderScreen = ({ navigation }: JobFinderScreenProps) => {
           )}
         />
       )}
+
+      {/* Button to view saved jobs */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('SavedJobs', { savedJobs })}
